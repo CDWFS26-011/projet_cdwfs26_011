@@ -1,0 +1,30 @@
+meta {
+  name: Calculate Distance
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:5000/api/distance
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "start_point": "2,5",
+    "end_point": "1,6"
+  }
+}
+
+tests {
+  test("status 200", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  test("result_distance existe", function() {
+    expect(res.getBody()).to.have.property("result_distance");
+  });
+  test("distance correcte A(2,5) B(1,6)", function() {
+    expect(res.getBody().result_distance).to.be.closeTo(1.4142, 0.001);
+  });
+}
