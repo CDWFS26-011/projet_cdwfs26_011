@@ -1,0 +1,18 @@
+/mnt/c/Users/Tasha/Desktop/BC04_EC10_Git_bonnes_pratiques_CDWFS26-011/projet_cdwfs26_011/.venv/lib/python3.12/site-packages/coverage/inorout.py:561: CoverageWarning: Module app was never imported. (module-not-imported); see https://coverage.readthedocs.io/en/7.14.1/messages.html#warning-module-not-imported
+  self.warn(f"Module {pkg} was never imported.", slug="module-not-imported")
+/mnt/c/Users/Tasha/Desktop/BC04_EC10_Git_bonnes_pratiques_CDWFS26-011/projet_cdwfs26_011/.venv/lib/python3.12/site-packages/coverage/control.py:958: CoverageWarning: No data was collected. (no-data-collected); see https://coverage.readthedocs.io/en/7.14.1/messages.html#warning-no-data-collected
+  self._warn("No data was collected.", slug="no-data-collected")
+/mnt/c/Users/Tasha/Desktop/BC04_EC10_Git_bonnes_pratiques_CDWFS26-011/projet_cdwfs26_011/.venv/lib/python3.12/site-packages/pytest_cov/plugin.py:366: CovReportWarning: Failed to generate report: No data to report.
+
+  warnings.warn(CovReportWarning(message), stacklevel=1)
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-9.1.0, pluggy-1.6.0
+rootdir: /mnt/c/Users/Tasha/Desktop/BC04_EC10_Git_bonnes_pratiques_CDWFS26-011/projet_cdwfs26_011
+configfile: pyproject.toml
+plugins: cov-7.1.0
+collected 0 items
+
+WARNING: Failed to generate report: No data to report.
+
+
+============================ no tests ran in 0.63s =============================
