@@ -1,0 +1,143 @@
+openapi: 3.0.3
+info:
+  title: Distance Calculator API
+  description: |
+    API REST de calcul de distance euclidienne entre deux points d'un plan 2D.
+    Formule : distance(AB) = sqrt((Bx-Ax)² + (By-Ay)²)
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:5000
+    description: Serveur de développement local
+
+paths:
+  /api:
+    get:
+      summary: Point d'entrée de l'API
+      operationId: getApiRoot
+      responses:
+        '200':
+          description: API disponible
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {}
+
+  /api/distance:
+    post:
+      summary: Calculer une distance entre deux points
+      description: |
+        Calcule la distance euclidienne via le théorème de Pythagore.
+        Bug connu : ne sauvegarde pas dans l'historique distances[].
+      operationId: calculateDistance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DistanceRequest'
+            examples:
+              exemple_standard:
+                summary: A(2,5) vers B(1,6)
+                value:
+                  start_point: "2,5"
+                  end_point: "1,6"
+              exemple_pythagoricien:
+                summary: A(0,0) vers B(3,4) — distance = 5
+                value:
+                  start_point: "0,0"
+                  end_point: "3,4"
+      responses:
+        '200':
+          description: Distance calculée avec succès
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DistanceResponse'
+        '400':
+          description: Requête invalide – format de coordonnées incorrect
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '415':
+          description: Content-Type non supporté (JSON requis)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/distances:
+    get:
+      summary: Lister tous les calculs effectués
+      description: |
+        Retourne l'historique des calculs depuis le démarrage.
+        Alimenté uniquement par le formulaire HTML (bug connu).
+        Données non persistées entre les redémarrages.
+      operationId: getAllDistances
+      responses:
+        '200':
+          description: Liste des calculs
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DistanceResponse'
+              example:
+                - requested_at: "2026-06-17T10:00:00"
+                  result_distance: 5.0
+                  start_point: [0, 0]
+                  end_point: [3, 4]
+
+components:
+  schemas:
+    DistanceRequest:
+      type: object
+      required:
+        - start_point
+        - end_point
+      properties:
+        start_point:
+          type: string
+          description: Coordonnées du point A au format "x,y"
+          pattern: '^-?\d+,-?\d+$'
+          example: "2,5"
+        end_point:
+          type: string
+          description: Coordonnées du point B au format "x,y"
+          pattern: '^-?\d+,-?\d+$'
+          example: "1,6"
+
+    DistanceResponse:
+      type: object
+      properties:
+        requested_at:
+          type: string
+          format: date-time
+          example: "2026-06-17T10:00:00"
+        result_distance:
+          type: number
+          format: float
+          example: 1.4142135623730951
+        start_point:
+          type: array
+          items:
+            type: integer
+          example: [2, 5]
+        end_point:
+          type: array
+          items:
+            type: integer
+          example: [1, 6]
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          example: "Format de coordonnées invalide. Attendu : 'x,y'"
+        code:
+          type: integer
+          example: 400
